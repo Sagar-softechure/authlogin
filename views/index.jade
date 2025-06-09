@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= title
+    p Welcome to #{title}
+    div(style="display: flex; gap: 10px;")
+      a(href="/login" style="text-decoration: none; color: black;") Login
+      a(href="/register" style="text-decoration: none; color: black;") Register
+    div(style="display: flex; gap: 10px;margin-top: 10px;")
+      a(href="/profile" style="text-decoration: none; color: black;") Profile
+      a(href="/logout" style="text-decoration: none; color: black;") Logout
+  if error
+    p(style="color: red;")= error
