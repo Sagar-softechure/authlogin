@@ -1,7 +1,44 @@
-p Login
-form(action="/login" method="post")
-  input(type="email" name="email" placeholder="Email")
-  input(type="password" name="password" placeholder="Password")
-  input(type="submit" value="Login")
+extends layout
 
-p(style="color: red;")= error
+block content
+  p Login
+  form#loginForm(action="/login" method="post")
+    input(type="email" name="email" placeholder="Email" required)
+    input(type="password" name="password" placeholder="Password" required)
+    input(type="submit" value="Login")
+
+  p#errorMessage(style="color: red; display: none;")
+
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('loginForm');
+      const errorMessage = document.getElementById('errorMessage');
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        errorMessage.style.display = 'none';
+        
+        try {
+          const formData = new FormData(this);
+          const response = await fetch('/login', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const data = await response.json();
+          
+          if (response.ok) {
+            localStorage.setItem('accessToken', data.accessToken);
+            window.location.href = '/';
+          } else {
+            errorMessage.textContent = data.error || 'Login failed';
+            errorMessage.style.display = 'block';
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          errorMessage.textContent = 'An error occurred during login';
+          errorMessage.style.display = 'block';
+        }
+      });
+    });

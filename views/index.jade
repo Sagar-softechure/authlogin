@@ -8,6 +8,47 @@ block content
       a(href="/register" style="text-decoration: none; color: black;") Register
     div(style="display: flex; gap: 10px;margin-top: 10px;")
       a(href="/profile" style="text-decoration: none; color: black;") Profile
-      a(href="/logout" style="text-decoration: none; color: black;") Logout
-  if error
-    p(style="color: red;")= error
+      form(action="/logout" method="post" style="display: inline;")
+        button(type="submit" style="background: none; border: none; cursor: pointer; text-decoration: none; color: black;") Logout
+      button#dashboardBtn(style="background: none; border: none; cursor: pointer; text-decoration: none; color: black;") Dashboard
+    if error
+      p(style="color: red;")= error
+
+//- block scripts
+//-   script.
+//-     document.addEventListener('DOMContentLoaded', function() {
+//-       document.getElementById('dashboardBtn').addEventListener('click', goToDashboard);
+//-     });
+
+//-     async function goToDashboard() {
+//-       try {
+//-         const response = await fetch('/dashboard', {
+//-           headers: {
+//-             'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+//-           }
+//-         });
+        
+//-         if (response.status === 401 || response.status === 403) {
+//-           // Token expired or invalid, try to refresh
+//-           const refreshResponse = await fetch('/refresh', {
+//-             method: 'POST',
+//-             credentials: 'include' // Important for cookies
+//-           });
+          
+//-           if (refreshResponse.ok) {
+//-             const { accessToken } = await refreshResponse.json();
+//-             localStorage.setItem('accessToken', accessToken);
+//-             // Retry dashboard request with new token
+//-             window.location.href = '/dashboard';
+//-           } else {
+//-             // Refresh failed, redirect to login
+//-             window.location.href = '/login';
+//-           }
+//-         } else if (response.ok) {
+//-           window.location.href = '/dashboard';
+//-         }
+//-       } catch (error) {
+//-         console.error('Error:', error);
+//-         window.location.href = '/login';
+//-       }
+//-     }
